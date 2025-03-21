@@ -28,11 +28,21 @@ jobs:
           ${{ inputs.package_path != '' && format('--package-path={0}', inputs.package_path) || '' }}
 
   linux:
-    name: Test on Linux
+    name: Test on Linux - ${{ matrix.swift-image }}
+    strategy:
+      matrix:
+        swift-image:
+          - "swift:5.8-jammy"
+          - "swift:5.9-jammy"
+          - "swift:5.10-jammy"
+          - "swift:5.10-noble"
+          - "swift:6.0-jammy"
+          - "swift:6.0-noble"
     runs-on: ubuntu-latest
+    container: ${{ matrix.swift-image }}
     steps:
-    - uses: swift-actions/setup-swift@v2
-    - uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
     - name: Test
       run: |
         swift test \
@@ -48,20 +58,3 @@ jobs:
       uses: skiptools/swift-android-action@v2
       with:
         package-path: ${{ inputs.package_path != '' && inputs.package_path || '.' }}
-
-  backcompat-ubuntu-22_04:
-    name: Test Swift ${{ matrix.swift }} on Ubuntu 22.04
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        swift: ["5.8", "5.9", "5.10", "6.0"]
-    steps:
-    - uses: swift-actions/setup-swift@v2
-      with:
-        swift-version: ${{ matrix.swift }}
-    - uses: actions/checkout@v4
-    - name: Test
-      run: |
-        swift test \
-          --parallel \
-          ${{ inputs.package_path != '' && format('--package-path={0}', inputs.package_path) || '' }}
