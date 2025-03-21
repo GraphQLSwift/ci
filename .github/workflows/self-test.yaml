@@ -1,0 +1,19 @@
+name: Self-test the CI workflows
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yaml
+    with:
+      package_path: WorkflowTestPackage
+  test:
+    uses: ./.github/workflows/test.yaml
+    with:
+      package_path: WorkflowTestPackage
