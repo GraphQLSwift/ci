@@ -8,6 +8,10 @@ on:
         required: false
         default: ''
         description: "Specifies a subpath of the checkout that the package is contained in."
+      include_android:
+        type: boolean
+        description: "Whether testing should include an Android target."
+        default: true
 
 env:
   PACKAGE_PATH: ${{ inputs.package_path != '' && format('--package-path={0}', inputs.package_path) || '' }}
@@ -51,6 +55,7 @@ jobs:
 
   android:
     name: Test on Android
+    if: ${{ inputs.include_android }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
