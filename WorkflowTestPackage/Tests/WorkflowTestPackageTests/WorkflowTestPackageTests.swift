@@ -1,9 +1,8 @@
 @testable import WorkflowTestPackage
-
 import XCTest
 
 class WorkflowTestPackageTests: XCTestCase {
-    func testHello() async throws {
+    func testHello() {
         XCTAssertEqual(WorkflowTest().hello(), "world")
     }
 }
