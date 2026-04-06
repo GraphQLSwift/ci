@@ -6,19 +6,20 @@ on:
       package_path:
         type: string
         required: false
-        default: ''
+        default: './'
         description: "Specifies a subpath of the checkout that the package is contained in."
 
 jobs:
   format:
     name: Format linting
     runs-on: ubuntu-latest
+    container: swift:latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Pull formatting docker image
-        run: docker pull ghcr.io/nicklockwood/swiftformat:latest
-      - name: Run format linting
-        run: docker run --rm -v ${{ github.workspace }}:/repo ghcr.io/nicklockwood/swiftformat:latest /repo/${{ inputs.package_path }} --lint
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Format
+      run: |
+        swift format lint \
+          --parallel \
+          --recursive \
+          ${{ inputs.package_path != './' && inputs.package_path || './' }}
