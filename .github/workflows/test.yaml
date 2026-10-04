@@ -18,36 +18,40 @@ env:
 
 jobs:
   macos:
-    name: Test on macOS
+    name: Test on macOS - ${{ matrix.swift-version }}
     runs-on: macos-latest
+    strategy:
+      matrix:
+        swift-version:
+          - "6.2"
+          - "6.3"
+          - "6.4"
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1
+    - uses: swift-actions/setup-swift@v3
       with:
-        xcode-version: latest-stable
+        swift-version: ${{ matrix.swift-version }}
     - uses: actions/checkout@v4
     - name: Build and test
       run: |
         swift test \
-          --parallel \
           ${{ inputs.package_path != '' && format('--package-path={0}', inputs.package_path) || '' }}
 
   linux:
-    name: Test on Linux - ${{ matrix.swift-image }}
+    name: Test on Linux - ${{ matrix.swift-tag }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        swift-image:
-          - "swift:6.2"
-          - "swift:6.3"
-          - "swift:6.4"
-    runs-on: ubuntu-latest
-    container: ${{ matrix.swift-image }}
+        swift-tag:
+          - "6.2"
+          - "6.3"
+          - "6.4"
+    container: "swift:${{ matrix.swift-tag }}"
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Test
       run: |
         swift test \
-          --parallel \
           ${{ inputs.package_path != '' && format('--package-path={0}', inputs.package_path) || '' }}
 
   android:
