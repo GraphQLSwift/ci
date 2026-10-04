@@ -36,12 +36,9 @@ jobs:
     strategy:
       matrix:
         swift-image:
-          - "swift:6.2-jammy"
-          - "swift:6.2-noble"
-          - "swift:6.3-jammy"
-          - "swift:6.3-noble"
-          - "swift:6.4-noble"
-          - "swift:6.4-resolute"
+          - "swift:6.2"
+          - "swift:6.3"
+          - "swift:6.4"
     runs-on: ubuntu-latest
     container: ${{ matrix.swift-image }}
     steps:
