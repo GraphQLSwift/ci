@@ -34,7 +34,6 @@ jobs:
     - name: Build and test
       run: |
         swift test \
-          --parallel \
           ${{ inputs.package_path != '' && format('--package-path={0}', inputs.package_path) || '' }}
 
   linux:
@@ -53,7 +52,6 @@ jobs:
     - name: Test
       run: |
         swift test \
-          --parallel \
           ${{ inputs.package_path != '' && format('--package-path={0}', inputs.package_path) || '' }}
 
   android:
